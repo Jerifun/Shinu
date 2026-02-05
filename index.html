@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Be My Valentine, Shinu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Playfair Display', serif; }
+        body, html { height: 100%; overflow: hidden; background: black; }
+
+        /* ROSE PETAL EFFECT */
+        .petal { 
+            position: fixed; 
+            width: 26px; 
+            height: 26px; 
+            background: url("rose.png") center/cover no-repeat; 
+            pointer-events: none; 
+            z-index: 20; 
+            opacity: 0.85;
+        }
+
+        /* FIRST PAGE */
+        #firstPage { 
+            height: 100vh; 
+            background: linear-gradient(135deg, #7b1e3c, #ffb3c6); 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            color: white; 
+            text-align: center;
+        }
+        
+        h1 { 
+            font-size: 3.5rem; 
+            margin-bottom: 60px; 
+            padding: 0 20px; 
+            z-index: 5;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .buttons-wrapper { 
+            position: relative; 
+            width: 100%; 
+            max-width: 600px; 
+            height: 120px; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+        }
+
+        button { 
+            padding: 20px 55px; 
+            font-size: 26px; 
+            border: none; 
+            border-radius: 50px; 
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            cursor: pointer; 
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        button:hover {
+            transform: scale(1.1) translateY(-5px);
+            filter: brightness(1.1);
+            box-shadow: 0 10px 25px rgba(255, 47, 104, 0.5);
+        }
+
+        #yesBtn { background: #ff2f68; color: white; z-index: 10; }
+        #noBtn { background: white; color: #ff2f68; z-index: 9; }
+
+        /* SECOND PAGE */
+        #secondPage { display: none; height: 100vh; overflow-y: auto; background: linear-gradient(135deg, #ff6a88, #ffb199); color: white; }
+        
+        .backBtn { 
+            position: fixed; top: 20px; left: 20px; padding: 12px 25px; 
+            background: white; color: #ff2f68; border-radius: 30px; 
+            z-index: 200; border: none; font-weight: bold; 
+        }
+
+        .section { display: none; min-height: 100vh; padding: 120px 20px 60px; text-align: center; }
+        #home { display: block; }
+
+        .main-buttons { display: flex; flex-direction: column; gap: 25px; align-items: center; margin-top: 50px; }
+        .main-buttons button { width: 85%; max-width: 480px; background: white; color: #ff2f68; font-size: 30px; padding: 25px; }
+
+        .sub-btn-wrapper {
+            display: flex; 
+            gap: 20px; 
+            justify-content: center; 
+            flex-wrap: wrap; 
+            margin: 40px 0;
+        }
+
+        .scroll { 
+            background: #f5e6c8; color: #3b2f1c; padding: 50px; border-radius: 25px; 
+            max-width: 850px; margin: 40px auto; font-size: 26px; line-height: 1.8; 
+            box-shadow: 0 0 50px rgba(0,0,0,0.3); display: none;
+        }
+
+        .img-display { max-width: 90%; margin: 30px auto; display: flex; justify-content: center; }
+        .img-display img { display: none; max-width: 100%; max-height: 70vh; border: 12px solid white; border-radius: 8px; box-shadow: 0 15px 35px rgba(0,0,0,0.4); }
+        .img-display img.active { display: block; }
+
+        textarea { width: 100%; height: 220px; background: transparent; border: none; outline: none; font-size: 26px; color: #3b2f1c; resize: none; }
+    </style>
+</head>
+<body>
+
+<audio id="bgMusic" loop>
+    <source src="love-music.mp3" type="audio/mpeg">
+</audio>
+
+<div id="firstPage">
+    <h1>Will you be my Valentine, Shinu?</h1>
+    <div class="buttons-wrapper">
+        <button id="yesBtn" onclick="openSecond()">Yes</button>
+        <button id="noBtn">No</button>
+    </div>
+</div>
+
+<div id="secondPage">
+    <button class="backBtn" onclick="goHome()">← Back</button>
+
+    <div class="section" id="home">
+        <h1>Yes... I knew it my little princess.</h1>
+        <div class="main-buttons">
+            <button onclick="showSection('us')">Us</button>
+            <button onclick="showSection('poems')">Poems</button>
+            <button onclick="showSection('story')">Story</button>
+            <button onclick="showSection('gallery')">Gallery</button>
+            <button onclick="showSection('letter')">What you feel about me</button>
+        </div>
+    </div>
+
+    <div class="section" id="us">
+        <h1>Us</h1>
+        <div class="img-display" id="us-slides">
+            <img src="us1.jpg" class="active">
+            <img src="us2.jpg">
+            <img src="us3.jpg">
+            <img src="us4.jpg">
+        </div>
+    </div>
+
+    <div class="section" id="poems">
+        <h1>Poems</h1>
+        <div class="sub-btn-wrapper">
+            <button onclick="showPoem('eyes')" style="background:#ff2f68; color:white; font-size:20px; padding: 15px 35px;">Eyes</button>
+            <button onclick="showPoem('hair')" style="background:#ff2f68; color:white; font-size:20px; padding: 15px 35px;">Hair</button>
+            <button onclick="showPoem('lips')" style="background:#ff2f68; color:white; font-size:20px; padding: 15px 35px;">Lips</button>
+            <button onclick="showPoem('you')" style="background:#ff2f68; color:white; font-size:20px; padding: 15px 35px;">You</button>
+        </div>
+        <div id="poemScroll" class="scroll"></div>
+    </div>
+
+    <div class="section" id="story">
+        <h1>Story</h1>
+        <div class="scroll" style="display:block;">
+            I was on a broken wooden board, lost in the ocean through storms and endless dark nights.<br>
+            The waves shook me, and every shore I reached pushed me back.<br> 
+            The skies punished me with lightning, and the rain began to hurt.<br>
+            I lost hope in this world, counting my end instead of dreams.<br>
+            Then I heard a voice in the cold breeze, whispering my name - beautiful as ever.<br>
+            I followed it with my heart. Each step softened the night, each breath felt less alone.<br>
+            The wind stopped hurting; it began to guide.<br>
+            There was a woman sitting by the seashore, calm as the moonlight. Love became my direction.<br>
+            She reached out her hand, not to save me— but to choose me.<br>
+            She pulled me from the sea, from the storms, from myself.<br>
+            And at her feet, where the waves finally learned silence, I was not rescued— I was reborn.
+        </div>
+    </div>
+
+    <div class="section" id="gallery">
+        <h1>Gallery</h1>
+        <div class="img-display" id="gal-slides">
+            <img src="g1.jpg" class="active">
+            <img src="g2.jpg">
+            <img src="g3.jpg">
+            <img src="g4.jpg">
+            <img src="g5.jpg">
+            <img src="g6.jpg">
+            <img src="g7.jpg">
+            <img src="g8.jpg">
+            <img src="g9.jpg">
+            <img src="g10.jpg">
+            <img src="g11.jpg">
+            <img src="g12.jpg">
+        </div>
+    </div>
+
+    <div class="section" id="letter">
+        <h1>What you feel about me</h1>
+        <div class="scroll" style="display:block;">
+            <textarea id="userLetter" placeholder="Write from your heart..."></textarea><br><br>
+            <button onclick="sendEmailOnly()" style="background:#ff2f68; color:white; width:100%;">Fly</button>
+        </div>
+    </div>
+</div>
+
+<script>
+const poemsData = {
+    eyes: `Your eyes are quiet storms and gentle calm.<br>I get lost in their depth and warmth.<br>Every glance feels like a promise,<br>a world opening softly just for me.<br>They reflect your soul in ways words cannot.<br>I see the truth, the kindness, the light.<br>Looking at you is seeing home.<br>In them, I find endless wonder.`,
+    hair: `Your hair moves like water, soft and free.<br>It carries the light in subtle ways.<br>I imagine my hands weaving through it,<br>feeling the gentle weight and warmth.<br>It frames your face and your spirit.<br>Every strand holds a quiet magic.<br>It tells stories of grace and movement.<br>I never want it to end.`,
+    lips: `Your lips are soft, patient, alive.<br>They hold the gentleness of every word you speak.<br>Even in silence, they are a language I understand.<br>They curve in ways that slow time.<br>Every smile makes the world softer.<br>Every whisper feels like closeness.<br>I want to trace their warmth endlessly.<br>They are a quiet, living poetry.`,
+    you: `Every part of you feels like it was meant to be.<br>Your presence changes the air, softens the space.<br>Your laughter carries me away.<br>Your hands, your gestures, your thoughts—<br>they are gentle currents I want to follow.<br>I am drawn to the way you move through the world.<br>Everything about you is a quiet wonder.<br>I want to be near it, always.`
+};
+
+function createPetal(){
+    const p = document.createElement("div");
+    p.className = "petal";
+    p.style.left = Math.random() * window.innerWidth + "px";
+    p.style.top = "-50px";
+    document.body.appendChild(p);
+    let speed = Math.random() * 2 + 1.5;
+    function fall(){
+        let top = parseFloat(p.style.top);
+        p.style.top = (top + speed) + "px";
+        if(top < window.innerHeight) requestAnimationFrame(fall);
+        else p.remove();
+    }
+    fall();
+}
+setInterval(createPetal, 200);
+
+const noBtn = document.getElementById("noBtn");
+const yesBtn = document.getElementById("yesBtn");
+let yesScale = 1;
+
+noBtn.addEventListener("mouseover", () => {
+    const maxX = window.innerWidth - noBtn.offsetWidth - 60;
+    const maxY = window.innerHeight - noBtn.offsetHeight - 60;
+    
+    noBtn.style.position = "fixed";
+    noBtn.style.left = Math.random() * maxX + "px";
+    noBtn.style.top = Math.random() * maxY + "px";
+    
+    yesScale += 0.15;
+    yesBtn.style.transform = `scale(${yesScale})`;
+});
+
+function openSecond(){
+    document.getElementById("firstPage").style.display = "none";
+    document.getElementById("secondPage").style.display = "block";
+    document.getElementById("bgMusic").play();
+}
+
+function showSection(id){
+    document.querySelectorAll(".section").forEach(s => s.style.display = "none");
+    document.getElementById(id).style.display = "block";
+}
+
+function goHome(){ showSection('home'); }
+
+function showPoem(type){
+    const s = document.getElementById("poemScroll");
+    s.innerHTML = poemsData[type];
+    s.style.display = "block";
+}
+
+function initSlides(containerId) {
+    let index = 0;
+    const imgs = document.querySelectorAll(`#${containerId} img`);
+    setInterval(() => {
+        imgs[index].classList.remove('active');
+        index = (index + 1) % imgs.length;
+        imgs[index].classList.add('active');
+    }, 3000);
+}
+initSlides('us-slides');
+initSlides('gal-slides');
+
+function sendEmailOnly(){
+    const text = document.getElementById('userLetter').value.trim();
+    if(!text) { alert("Please write a message first!"); return; }
+    window.location.href = `mailto:jerifunjerry@gmail.com?subject=A Letter from Shinu&body=${encodeURIComponent(text)}`;
+}
+</script>
+</body>
+</html>
